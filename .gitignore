@@ -115,3 +115,14 @@ model_data/
 # Pycharm files
 .idea/
 .DS_Store
+
+.vscode/
+__pycache__/
+datasets/ISIC2018/cache
+datasets/ISIC2018/__pycache__
+datasets/ISIC2018/data
+datasets/ISIC2018/dataz
+runs/
+ISIC-Archive-Downloader/
+Skin-Cancer-Segmentation
+*.pth

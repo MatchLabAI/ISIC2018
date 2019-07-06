@@ -188,15 +188,16 @@ def load_task12_training_images(output_size=None):
     images_npy_filename = os.path.join(cached_data_dir, '%s%s.npy' % (task12_images_npy_prefix, suffix))
 
     if os.path.exists(images_npy_filename):
-
         images = np.load(images_npy_filename)
     else:
         images = load_images(image_ids=task12_image_ids,
                              from_dir=task12_img_dir,
                              output_size=output_size,
                              fname_fn=lambda x: '%s.jpg' % x)
+        
+        # print(task12_image_ids)
+        # print(images)
         images = np.stack(images).astype(np.uint8)
-        print(images.shape)
         np.save(images_npy_filename, images)
     return images
 
@@ -408,8 +409,6 @@ def load_training_data(task_idx,
     if task_idx == 1:
         x = load_task12_training_images(output_size=output_size)
         y = load_task1_training_masks(output_size=output_size)
-        print(x.shape)
-        print(y.shape)
         return partition_data(x=x, y=y, k=num_partitions, i=idx_partition, test_split=test_split)
 
     elif task_idx == 2:
@@ -459,6 +458,8 @@ def partition_data(x, y, k=5, i=0, test_split=1. / 6, seed=42):
     test_indices = (indices == -1)
     train_indices = ~(valid_indices | test_indices)
 
+    print(x.shape)
+    print(y.shape)
     x_valid = x[valid_indices]
     y_valid = y[valid_indices]
 

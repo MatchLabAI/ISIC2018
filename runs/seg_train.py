@@ -1,3 +1,16 @@
+import os
+import tensorflow as tf
+import keras.backend.tensorflow_backend as ktf
+# os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
+
+def get_session(gpu_fraction=1.0):
+     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=gpu_fraction,
+                                 allow_growth=True)
+     return tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+
+
+# ktf.set_session(get_session())
+
 if __name__ == '__main__':
     from datasets.ISIC2018 import *
     from callback import config_seg_callbacks
@@ -8,12 +21,14 @@ if __name__ == '__main__':
     from models import backbone
     import numpy as np
     import sys
+    import sklearn
 
     task_idx = 1
     version = '0'
 
     num_folds = 5
 
+    print("Started")
     for k_fold in range(num_folds):
 
         # backbone_name = 'unet'
@@ -52,7 +67,8 @@ if __name__ == '__main__':
             backbone_options = {}
 
         # training parameter
-        batch_size = 32
+        #batch_size = 32
+        batch_size = 1
         initial_epoch = 0
         epochs = 25
         init_lr = 1e-4  # Note learning rate is very important to get this to train stably
@@ -92,7 +108,7 @@ if __name__ == '__main__':
                        'jaccard_index3',
                        'jaccard_index4',
                        'jaccard_index5']
-
+        print("Loading Trading Data")
         (x_train, y_train), (x_valid, y_valid), _ = load_training_data(task_idx=task_idx,
                                                                        output_size=224,
                                                                        num_partitions=num_folds,
